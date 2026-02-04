@@ -6,7 +6,12 @@ import Log from "./components/Log.jsx";
 import GameOver from "./components/GameOver.jsx";
 import { WINNING_COMBINATIONS } from "./winning-combinations.js";
 
-const initialGameBoard = [
+const PLAYERS = {
+  X: 'Player 1',
+  O: 'Player 2',
+};
+
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null]
@@ -19,7 +24,7 @@ const driveActivePlayer = function (turns) {
 }
 
 function dirveGameBoard(gameTurns) {
-  let gameBoard = [...initialGameBoard.map(arr => [...arr])];
+  let gameBoard = [...INITIAL_GAME_BOARD.map(arr => [...arr])];
 
   for (const turn of gameTurns) {
     const { square, player } = turn;
@@ -52,10 +57,7 @@ const driveWinner = function (gameBoard, players) {
 }
 
 function App() {
-  const [players, setPlayers] = useState({
-    'X': 'Player 1',
-    'O': 'Player 2'
-  });
+  const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
 
   const activePlayer = driveActivePlayer(gameTurns);
@@ -94,8 +96,8 @@ function App() {
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player initialName='Player 1' symbol='X' isActive={activePlayer === 'X'} onChangeName={handlePlayerNameChange} />
-          <Player initialName='Player 2' symbol='O' isActive={activePlayer === 'O'} onChangeName={handlePlayerNameChange} />
+          <Player initialName={PLAYERS.X} symbol='X' isActive={activePlayer === 'X'} onChangeName={handlePlayerNameChange} />
+          <Player initialName={PLAYERS.O} symbol='O' isActive={activePlayer === 'O'} onChangeName={handlePlayerNameChange} />
         </ol>
         {(winner || hasDraw) && <GameOver winner={winner} onRematch={handleRematch} />}
         <GameBoard onSelcetedPlayer={handleSelectedSquare} board={gameBoard} />
