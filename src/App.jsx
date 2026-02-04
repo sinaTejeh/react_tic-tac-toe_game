@@ -18,15 +18,7 @@ const driveActivePlayer = function (turns) {
   return currentPlayer;
 }
 
-function App() {
-  const [players, setPlayers] = useState({
-    'X': 'Player 1',
-    'O': 'Player 2'
-  })
-  const [gameTurns, setGameTurns] = useState([]);
-
-  const activePlayer = driveActivePlayer(gameTurns);
-
+function dirveGameBoard(gameTurns) {
   let gameBoard = [...initialGameBoard.map(arr => [...arr])];
 
   for (const turn of gameTurns) {
@@ -34,8 +26,13 @@ function App() {
     const { row, col } = square;
     gameBoard[row][col] = player;
   }
+  console.log(gameBoard);
+  return gameBoard;
+};
 
+const driveWinner = function (gameBoard, players) {
   let winner;
+
   WINNING_COMBINATIONS.forEach(combination => {
     const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
     const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
@@ -47,9 +44,23 @@ function App() {
       firstSquareSymbol === thirdSquareSymbol
     ) {
       winner = players[firstSquareSymbol];
+      console.log(winner);
     }
-  });
 
+  });
+  return winner;
+}
+
+function App() {
+  const [players, setPlayers] = useState({
+    'X': 'Player 1',
+    'O': 'Player 2'
+  });
+  const [gameTurns, setGameTurns] = useState([]);
+
+  const activePlayer = driveActivePlayer(gameTurns);
+  const gameBoard = dirveGameBoard(gameTurns);
+  const winner = driveWinner(gameBoard, players);
   const hasDraw = gameTurns.length === 9 && !winner;
 
   const handleSelectedSquare = function (rowIndex, colIndex) {
